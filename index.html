@@ -559,7 +559,7 @@
 
   /* SUB-FILTERS */
   .sub-filter-row {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
@@ -567,6 +567,7 @@
     padding-top: 10px;
     border-top: 1px solid var(--border);
   }
+  .sub-filter-row.visible { display: flex; }
   .sub-filter-label {
     font-size: 0.6rem;
     letter-spacing: 0.2em;
@@ -976,6 +977,8 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyFilter(btn.dataset.filter);
+    const subRow = document.querySelector('.sub-filter-row');
+    subRow.classList.toggle('visible', btn.dataset.filter === 'tercuman');
   });
 });
 
