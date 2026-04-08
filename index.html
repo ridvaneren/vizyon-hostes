@@ -671,21 +671,16 @@
       <div class="admin-section-label">Catering Paketleri</div>
       <div class="admin-group">
         <label>Bronz Paket (₺)</label>
-        <input type="number" id="inp-bronz" value="2400">
+        <input type="number" id="inp-bronz" value="4990">
       </div>
       <div class="admin-group">
         <label>Gümüş Paket (₺)</label>
-        <input type="number" id="inp-gumus" value="4800">
+        <input type="number" id="inp-gumus" value="6990">
       </div>
       <div class="admin-group">
         <label>Altın Paket (₺)</label>
-        <input type="number" id="inp-altin" value="8000">
+        <input type="number" id="inp-altin" value="9990">
       </div>
-      <div class="admin-group">
-        <label>Platin Paket (₺)</label>
-        <input type="number" id="inp-platin" value="13600">
-      </div>
-
       <button class="admin-save" id="admin-save-btn">Kaydet</button>
       <div class="admin-success" id="admin-success-msg">Fiyatlar kaydedildi</div>
     </div>
@@ -766,19 +761,21 @@
     <div style="margin-top:48px;padding-top:36px;border-top:1px solid var(--border)">
       <div class="fiyat-title">Catering Hizmetleri</div>
       <div class="fiyat-subtitle">Fuar Catering Paketleri</div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
 
         <!-- BRONZ -->
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
             <img src="catering/bronz paket.png" alt="Bronz Paket">
-            <div class="fiyat-badge" id="price-bronz">₺2.400<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-bronz">₺4.990<small>+ %20 KDV</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Bronz Paket</div>
             <ul class="fiyat-kart-list">
-              <li>Bardak su, sıcak içecekler (Çay, Nescafe, Bitki Çayları)</li>
-              <li>Mutfak ekipmanları dahil</li>
+              <li>Damacana ve bardak su, soda</li>
+              <li>Lüks kuruyemiş</li>
+              <li>Nescafe, çay, karton bardak, karıştırıcı, şeker</li>
+              <li><b>1 Servis Hostesi</b></li>
             </ul>
           </div>
         </div>
@@ -787,14 +784,16 @@
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
             <img src="catering/gümüş paket.png" alt="Gümüş Paket">
-            <div class="fiyat-badge" id="price-gumus">₺4.800<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-gumus">₺6.990<small>günlük</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Gümüş Paket</div>
             <ul class="fiyat-kart-list">
-              <li>Bardak su, Nescafe, Çay, Bitki Çayları, Soda, Meyve Suları</li>
-              <li>Bisküvit &amp; çerezler</li>
-              <li>Mutfak ekipmanları dahil</li>
+              <li>Tam otomatik kahve makinesi</li>
+              <li>Akıllı çay makinesi, Türk kahve makinesi</li>
+              <li>Mini buzdolabı, soğuk meşrubatlar</li>
+              <li>Lüks kuruyemiş, tatlı-tuzlu kurabiye</li>
+              <li><b>1 Servis Hostesi</b></li>
             </ul>
           </div>
         </div>
@@ -802,33 +801,18 @@
         <!-- ALTIN -->
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
-            <img src="catering/altın paket.png" alt="Altın Paket">
-            <div class="fiyat-badge" id="price-altin">₺8.000<small>günlük</small></div>
+            <img src="catering/altın paket (2).png" alt="Altın Paket">
+            <div class="fiyat-badge" id="price-altin">₺9.990<small>+ %20 KDV</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Altın Paket</div>
             <ul class="fiyat-kart-list">
-              <li>Bardak su, Nescafe, Bitki Çayları, Türk Kahvesi, Soda, Meyve Suları, Kola, Fanta</li>
-              <li>Bisküvit &amp; çerezler</li>
+              <li>Tam otomatik kahve &amp; çay makinesi, Türk kahve makinesi</li>
+              <li>Mini buzdolabı, su sebili</li>
+              <li>Meşrubatlar (kola, soda, limonata)</li>
+              <li>Mini sandviç, tatlı çeşitleri (ekler, profiterol)</li>
+              <li>4 çeşit lüks kanepe, lüks kuruyemiş, tatlı-tuzlu kurabiye</li>
               <li><b>1 Servis Hostesi</b></li>
-              <li>Mutfak ekipmanları dahil</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- PLATİN -->
-        <div class="fiyat-kart" style="border-color:#c9a84c55">
-          <div class="fiyat-kart-img">
-            <img src="catering/platin paket.png" alt="Platin Paket">
-            <div class="fiyat-badge" id="price-platin" style="background:#fff;color:#000">₺13.600<small>günlük</small></div>
-          </div>
-          <div class="fiyat-kart-body">
-            <div class="fiyat-kart-title" style="color:#e0c87a">Platin Paket</div>
-            <ul class="fiyat-kart-list">
-              <li>Bardak su, Nescafe, Çay, Bitki Çayları, Türk Kahvesi, Soda, Meyve Suları, Kola, Fanta</li>
-              <li>Gün boyu atıştırmalıklar (sigara böreği vb.)</li>
-              <li><b>1 Servis Hostesi</b></li>
-              <li><b>1 Karşılama Hostesi</b></li>
             </ul>
           </div>
         </div>
@@ -840,11 +824,11 @@
         <div style="font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Genel Koşullar</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 32px;">
           <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm ürünler fuar süresince sınırsız servis edilmektedir</div>
-          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Nakliye, kurulum ve toplama hizmetleri fiyata dahildir</div>
           <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm ürünler günlük ve taze olarak temin edilmektedir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Nakliye, kurulum ve toplama hizmetleri fiyata dahildir</div>
           <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm servis ve sunum ekipmanları fiyata dahildir</div>
-          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Servis hostesi çalışma süresi fuar saatleri ile sınırlıdır</div>
           <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Fatura fuardan 1 gün önce kesilir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Ödeme fuar bitiminden sonraki ilk 5 iş günü içinde yapılır</div>
         </div>
       </div>
     </div>
@@ -1017,8 +1001,8 @@ applyFilter('all');
 
 // ── ADMIN PANELİ ──────────────────────────────────────────
 const ADMIN_PW = 'Ridvan2026';
-const PRICE_KEYS = ['tercuman','servis','karsilama','bronz','gumus','altin','platin'];
-const PRICE_DEFAULTS = {tercuman:3600,servis:2400,karsilama:3000,bronz:2400,gumus:4800,altin:8000,platin:13600};
+const PRICE_KEYS = ['tercuman','servis','karsilama','bronz','gumus','altin'];
+const PRICE_DEFAULTS = {tercuman:3600,servis:2400,karsilama:3000,bronz:4990,gumus:6990,altin:9990};
 
 function formatPrice(val) {
   return '₺' + Number(val).toLocaleString('tr-TR');
