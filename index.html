@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brezza Ajans — Host/Hostes Portföy</title>
+<title>Vizyon Ajans - Host/Hostes/Catering Portföy</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -125,7 +125,7 @@
   .grid-section {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2px;
+    gap: 10px;
     margin-bottom: 60px;
   }
   .card {
@@ -415,6 +415,171 @@
     font-weight: 500;
   }
 
+  /* ADMIN PANEL */
+  .admin-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+  }
+  .admin-overlay.open { display: flex; }
+  .admin-box {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    position: relative;
+  }
+  .admin-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .admin-subtitle {
+    font-size: 1.2rem;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .admin-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .admin-close:hover { color: var(--text); }
+  .admin-group {
+    margin-bottom: 14px;
+  }
+  .admin-group label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .admin-group input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .admin-group input:focus { border-color: var(--accent); }
+  .admin-section-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 20px 0 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .admin-save {
+    width: 100%;
+    margin-top: 24px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    padding: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+  .admin-save:hover { opacity: 0.85; }
+  .admin-success {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.68rem;
+    color: #78c878;
+    letter-spacing: 0.15em;
+    display: none;
+  }
+  /* SIFRE EKRANI */
+  .admin-pw-screen { display: block; }
+  .admin-form-screen { display: none; }
+
+  /* LIGHTBOX */
+  .lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  .lightbox-overlay.open { display: flex; }
+  .lightbox-overlay img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    cursor: default;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 20px; right: 28px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    z-index: 2001;
+  }
+  .lightbox-close:hover { opacity: 1; }
+  .card-photos img { cursor: zoom-in; }
+  .list-photos img { cursor: zoom-in; }
+
+  /* SUB-FILTERS */
+  .sub-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .sub-filter-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 4px;
+  }
+  .filter-btn.sub-btn {
+    font-size: 0.68rem;
+    padding: 5px 14px;
+    border-color: #2a2a2a;
+  }
+
   @media (max-width: 768px) {
     header, .toolbar, main, footer { padding-left: 20px; padding-right: 20px; }
     .list-info { flex-wrap: wrap; gap: 10px; padding: 12px; }
@@ -439,14 +604,18 @@
 
 <div class="toolbar">
   <span class="filter-label">Filtre</span>
-  <div class="filters">
+  <div class="filters" style="flex-wrap:wrap;row-gap:10px;">
     <button class="filter-btn active" data-filter="all">Tümü</button>
     <button class="filter-btn" data-filter="servis">Servis &amp; Karşılama</button>
-    <button class="filter-btn" data-filter="tercuman">Tercümanlar</button>
-    <button class="filter-btn" data-filter="ingilizce">İngilizce</button>
-    <button class="filter-btn" data-filter="rusca">Rusça</button>
-    <button class="filter-btn" data-filter="arapca">Arapça</button>
+    <button class="filter-btn" data-filter="tercuman">Tercüman</button>
+    <button class="filter-btn" data-filter="catering" style="border-color:#6a9a6a;color:#6a9a6a;">Catering</button>
     <button class="filter-btn" id="fiyatlar-btn" data-filter="fiyatlar" style="margin-left:12px;border-color:#c9a84c;color:#c9a84c;">Fiyatlar</button>
+    <div class="sub-filter-row">
+      <span class="sub-filter-label">Tercüman Dili</span>
+      <button class="filter-btn sub-btn" data-filter="ingilizce">🇬🇧 İngilizce</button>
+      <button class="filter-btn sub-btn" data-filter="rusca">🇷🇺 Rusça</button>
+      <button class="filter-btn sub-btn" data-filter="arapca">🇸🇦 Arapça</button>
+    </div>
   </div>
   <div class="spacer"></div>
   <div class="result-count"><b id="visible-count">25</b> sonuç</div>
@@ -463,6 +632,72 @@
   <div class="empty-msg" id="empty-msg">Sonuç bulunamadı</div>
 </main>
 
+<!-- ADMIN PANEL -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-box">
+    <button class="admin-close" id="admin-close">&times;</button>
+
+    <!-- Şifre ekranı -->
+    <div class="admin-pw-screen" id="admin-pw-screen">
+      <div class="admin-title">Vizyon Ajans</div>
+      <div class="admin-subtitle">Admin Girişi</div>
+      <div class="admin-group">
+        <label>Şifre</label>
+        <input type="password" id="admin-pw-input" placeholder="••••••••">
+      </div>
+      <button class="admin-save" id="admin-pw-btn">Giriş Yap</button>
+      <div class="admin-success" id="admin-pw-error" style="color:#e07878;">Hatalı şifre</div>
+    </div>
+
+    <!-- Fiyat formu -->
+    <div class="admin-form-screen" id="admin-form-screen">
+      <div class="admin-title">Vizyon Ajans</div>
+      <div class="admin-subtitle">Fiyat Yönetimi</div>
+
+      <div class="admin-section-label">Hostes Paketleri</div>
+      <div class="admin-group">
+        <label>Tercüman Hostesi (₺)</label>
+        <input type="number" id="inp-tercuman" value="3600">
+      </div>
+      <div class="admin-group">
+        <label>Servis Hostesi (₺)</label>
+        <input type="number" id="inp-servis" value="2400">
+      </div>
+      <div class="admin-group">
+        <label>Karşılama Hostesi (₺)</label>
+        <input type="number" id="inp-karsilama" value="3000">
+      </div>
+
+      <div class="admin-section-label">Catering Paketleri</div>
+      <div class="admin-group">
+        <label>Bronz Paket (₺)</label>
+        <input type="number" id="inp-bronz" value="2400">
+      </div>
+      <div class="admin-group">
+        <label>Gümüş Paket (₺)</label>
+        <input type="number" id="inp-gumus" value="4800">
+      </div>
+      <div class="admin-group">
+        <label>Altın Paket (₺)</label>
+        <input type="number" id="inp-altin" value="8000">
+      </div>
+      <div class="admin-group">
+        <label>Platin Paket (₺)</label>
+        <input type="number" id="inp-platin" value="13600">
+      </div>
+
+      <button class="admin-save" id="admin-save-btn">Kaydet</button>
+      <div class="admin-success" id="admin-success-msg">Fiyatlar kaydedildi</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox-overlay">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <!-- FIYAT MODAL -->
 <div class="fiyat-overlay" id="fiyat-overlay">
   <div class="fiyat-modal">
@@ -475,7 +710,7 @@
       <div class="fiyat-kart">
         <div class="fiyat-kart-img">
           <img src="images/hostes_17_1.jpeg" alt="Tercüman Hostes">
-          <div class="fiyat-badge">₺3.600<small>günlük</small></div>
+          <div class="fiyat-badge" id="price-tercuman">₺3.600<small>günlük</small></div>
         </div>
         <div class="fiyat-kart-body">
           <div class="fiyat-kart-title">Tercüman Hostes</div>
@@ -494,7 +729,7 @@
       <div class="fiyat-kart">
         <div class="fiyat-kart-img">
           <img src="images/hostes_7_1.jpeg" alt="Servis Hostesi">
-          <div class="fiyat-badge">₺2.400<small>günlük</small></div>
+          <div class="fiyat-badge" id="price-servis">₺2.400<small>günlük</small></div>
         </div>
         <div class="fiyat-kart-body">
           <div class="fiyat-kart-title">Servis Hostesi</div>
@@ -512,7 +747,7 @@
       <div class="fiyat-kart">
         <div class="fiyat-kart-img">
           <img src="images/hostes_1_1.jpeg" alt="Karşılama Hostesi">
-          <div class="fiyat-badge">₺3.000<small>günlük</small></div>
+          <div class="fiyat-badge" id="price-karsilama">₺3.000<small>günlük</small></div>
         </div>
         <div class="fiyat-kart-body">
           <div class="fiyat-kart-title">Karşılama Hostesi</div>
@@ -537,7 +772,7 @@
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
             <img src="catering/bronz paket.png" alt="Bronz Paket">
-            <div class="fiyat-badge">₺2.400<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-bronz">₺2.400<small>günlük</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Bronz Paket</div>
@@ -552,7 +787,7 @@
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
             <img src="catering/gümüş paket.png" alt="Gümüş Paket">
-            <div class="fiyat-badge">₺4.800<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-gumus">₺4.800<small>günlük</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Gümüş Paket</div>
@@ -568,7 +803,7 @@
         <div class="fiyat-kart">
           <div class="fiyat-kart-img">
             <img src="catering/altın paket.png" alt="Altın Paket">
-            <div class="fiyat-badge">₺8.000<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-altin">₺8.000<small>günlük</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title">Altın Paket</div>
@@ -585,7 +820,7 @@
         <div class="fiyat-kart" style="border-color:#c9a84c55">
           <div class="fiyat-kart-img">
             <img src="catering/platin paket.png" alt="Platin Paket">
-            <div class="fiyat-badge" style="background:#fff;color:#000">₺13.600<small>günlük</small></div>
+            <div class="fiyat-badge" id="price-platin" style="background:#fff;color:#000">₺13.600<small>günlük</small></div>
           </div>
           <div class="fiyat-kart-body">
             <div class="fiyat-kart-title" style="color:#e0c87a">Platin Paket</div>
@@ -618,7 +853,7 @@
 </div>
 
 <footer>
-  &copy; 2024 Brezza Ajans — Tüm hakları saklıdır
+  &copy; 2026 Vizyon Mimarlık - Tüm hakları saklıdır
 </footer>
 
 <script>
@@ -673,13 +908,18 @@ function buildStats(h) {
   return s;
 }
 
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-overlay').classList.add('open');
+}
+
 function renderGrid(list) {
   const el = document.getElementById('grid-section');
   el.innerHTML = list.map(h => `
     <div class="card">
       <div class="card-photos">
-        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
-        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'" onclick="openLightbox('${h.resim1}')">
+        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'" onclick="openLightbox('${h.resim2}')">
       </div>
       <div class="card-num">${String(h.id).padStart(2,'0')}</div>
       <div class="card-info">
@@ -696,8 +936,8 @@ function renderList(list) {
   el.innerHTML = list.map(h => `
     <div class="list-item">
       <div class="list-photos">
-        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
-        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'" onclick="openLightbox('${h.resim1}')">
+        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'" onclick="openLightbox('${h.resim2}')">
       </div>
       <div class="list-info">
         <div class="list-name">${h.isim}</div>
@@ -739,14 +979,31 @@ function applyFilter(filter) {
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (btn.dataset.filter === 'fiyatlar') {
+    if (btn.dataset.filter === 'fiyatlar' || btn.dataset.filter === 'catering') {
       document.getElementById('fiyat-overlay').classList.add('open');
+      if (btn.dataset.filter === 'catering') {
+        setTimeout(() => {
+          const cateringSection = document.querySelector('.fiyat-overlay .fiyat-subtitle:last-of-type');
+          if (cateringSection) cateringSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
       return;
     }
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyFilter(btn.dataset.filter);
   });
+});
+
+// Lightbox
+document.getElementById('lightbox-close').addEventListener('click', () => {
+  document.getElementById('lightbox-overlay').classList.remove('open');
+});
+document.getElementById('lightbox-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.getElementById('lightbox-overlay').classList.remove('open');
 });
 
 document.getElementById('fiyat-close').addEventListener('click', () => {
@@ -757,6 +1014,80 @@ document.getElementById('fiyat-overlay').addEventListener('click', (e) => {
 });
 
 applyFilter('all');
+
+// ── ADMIN PANELİ ──────────────────────────────────────────
+const ADMIN_PW = 'Ridvan2026';
+const PRICE_KEYS = ['tercuman','servis','karsilama','bronz','gumus','altin','platin'];
+const PRICE_DEFAULTS = {tercuman:3600,servis:2400,karsilama:3000,bronz:2400,gumus:4800,altin:8000,platin:13600};
+
+function formatPrice(val) {
+  return '₺' + Number(val).toLocaleString('tr-TR');
+}
+
+function applyPrices(prices) {
+  PRICE_KEYS.forEach(key => {
+    const el = document.getElementById('price-' + key);
+    if (!el) return;
+    const small = el.querySelector('small');
+    el.childNodes[0].textContent = formatPrice(prices[key]);
+    if (small) el.appendChild(small);
+  });
+}
+
+function loadPrices() {
+  const saved = localStorage.getItem('vz_prices');
+  const prices = saved ? JSON.parse(saved) : {...PRICE_DEFAULTS};
+  applyPrices(prices);
+  PRICE_KEYS.forEach(key => {
+    const inp = document.getElementById('inp-' + key);
+    if (inp) inp.value = prices[key];
+  });
+}
+
+function savePrices() {
+  const prices = {};
+  PRICE_KEYS.forEach(key => {
+    prices[key] = document.getElementById('inp-' + key).value;
+  });
+  localStorage.setItem('vz_prices', JSON.stringify(prices));
+  applyPrices(prices);
+  const msg = document.getElementById('admin-success-msg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 2500);
+}
+
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('open');
+  document.getElementById('admin-pw-screen').style.display = 'block';
+  document.getElementById('admin-form-screen').style.display = 'none';
+  document.getElementById('admin-pw-input').value = '';
+  document.getElementById('admin-pw-error').style.display = 'none';
+}
+
+document.getElementById('admin-pw-btn').addEventListener('click', () => {
+  if (document.getElementById('admin-pw-input').value === ADMIN_PW) {
+    document.getElementById('admin-pw-screen').style.display = 'none';
+    document.getElementById('admin-form-screen').style.display = 'block';
+  } else {
+    document.getElementById('admin-pw-error').style.display = 'block';
+  }
+});
+
+document.getElementById('admin-pw-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('admin-pw-btn').click();
+});
+
+document.getElementById('admin-save-btn').addEventListener('click', savePrices);
+
+document.getElementById('admin-close').addEventListener('click', () => {
+  document.getElementById('admin-overlay').classList.remove('open');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'A') openAdmin();
+});
+
+loadPrices();
 </script>
 </body>
 </html>
