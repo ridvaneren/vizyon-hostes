@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brezza Ajans — Host/Hostes Portföy</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080808;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --border: #2a2a2a;
+    --border-hover: #555;
+    --text: #f0f0f0;
+    --text-muted: #888;
+    --accent: #c9a84c;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px 30px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .logo-area h1 {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .logo-area p {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .header-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+  .header-count span {
+    display: block;
+    color: var(--accent);
+    font-size: 2rem;
+    font-weight: 200;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* TOOLBAR */
+  .toolbar {
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 7px 18px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+  .spacer { flex: 1; }
+  .result-count { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.05em; }
+  .result-count b { color: var(--text); }
+
+  /* MAIN */
+  main { padding: 40px 60px; }
+
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* GRID */
+  .grid-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+    margin-bottom: 60px;
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    position: relative;
+  }
+  .card:hover { border-color: var(--border-hover); }
+  .card-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 300px;
+    gap: 1px;
+    background: var(--border);
+  }
+  .card-photos img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(15%) brightness(0.95);
+    transition: filter 0.3s;
+  }
+  .card:hover .card-photos img { filter: grayscale(0%) brightness(1); }
+  .card-info { padding: 16px; border-top: 1px solid var(--border); }
+  .card-num {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    padding: 3px 7px;
+    letter-spacing: 0.08em;
+  }
+  .card-name {
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-stats {
+    display: flex;
+    gap: 14px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .stat-val { color: var(--text); }
+  .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  /* LIST */
+  .view-divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 50px 0 30px;
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+  }
+  .view-divider::before, .view-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .list-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .list-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    transition: border-color 0.25s;
+    cursor: pointer;
+  }
+  .list-item:hover { border-color: var(--border-hover); }
+  .list-photos {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    width: 200px;
+    min-width: 200px;
+    height: 110px;
+  }
+  .list-photos img {
+    width: 50%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    filter: grayscale(15%) brightness(0.95);
+    transition: filter 0.3s;
+  }
+  .list-item:hover .list-photos img { filter: grayscale(0%) brightness(1); }
+  .list-info {
+    flex: 1;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .list-name {
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 180px;
+  }
+  .list-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .list-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-left: auto; }
+
+  /* TAGS */
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .tag-ing  { border-color: rgba(201,168,76,0.5);  color: #c9a84c; }
+  .tag-rus  { border-color: rgba(100,160,220,0.5); color: #64a0dc; }
+  .tag-ara  { border-color: rgba(120,200,120,0.5); color: #78c878; }
+  .tag-alm  { border-color: rgba(200,120,100,0.5); color: #c87864; }
+  .tag-terc { border-color: rgba(180,100,200,0.4); color: #b464c8; font-size: 0.58rem; }
+
+  /* EMPTY */
+  .empty-msg {
+    text-align: center;
+    padding: 80px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 60px;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 60px;
+  }
+
+  /* FIYAT MODAL */
+  .fiyat-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 60px 20px;
+  }
+  .fiyat-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  .fiyat-modal {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 960px;
+    padding: 48px;
+    position: relative;
+  }
+  .fiyat-close {
+    position: absolute;
+    top: 20px; right: 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .fiyat-close:hover { color: var(--text); }
+  .fiyat-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .fiyat-subtitle {
+    font-size: 1.6rem;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .fiyat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .fiyat-kart {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .fiyat-kart-img {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fiyat-kart-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    filter: grayscale(20%) brightness(0.8);
+  }
+  .fiyat-badge {
+    position: absolute;
+    top: 14px; left: 14px;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    line-height: 1.2;
+  }
+  .fiyat-badge small {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .fiyat-kart-body {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .fiyat-kart-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .fiyat-kart-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .fiyat-kart-list li {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+  .fiyat-kart-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.6rem;
+    top: 3px;
+  }
+  .fiyat-kart-list li b {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    header, .toolbar, main, footer { padding-left: 20px; padding-right: 20px; }
+    .list-info { flex-wrap: wrap; gap: 10px; padding: 12px; }
+    .list-name { min-width: unset; width: 100%; }
+    .list-tags { margin-left: 0; }
+    .list-photos { width: 160px; min-width: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <h1>Vizyon Mimarlık</h1>
+    <p>Host &amp; Hostes Portföy</p>
+  </div>
+  <div class="header-count">
+    <span id="total-count">25</span>
+    profesyonel
+  </div>
+</header>
+
+<div class="toolbar">
+  <span class="filter-label">Filtre</span>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Tümü</button>
+    <button class="filter-btn" data-filter="servis">Servis &amp; Karşılama</button>
+    <button class="filter-btn" data-filter="tercuman">Tercümanlar</button>
+    <button class="filter-btn" data-filter="ingilizce">İngilizce</button>
+    <button class="filter-btn" data-filter="rusca">Rusça</button>
+    <button class="filter-btn" data-filter="arapca">Arapça</button>
+    <button class="filter-btn" id="fiyatlar-btn" data-filter="fiyatlar" style="margin-left:12px;border-color:#c9a84c;color:#c9a84c;">Fiyatlar</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="result-count"><b id="visible-count">25</b> sonuç</div>
+</div>
+
+<main>
+  <div class="section-label" id="lbl-grid">Grid Görünüm</div>
+  <div class="grid-section" id="grid-section"></div>
+
+  <div class="view-divider" id="divider" style="display:none"></div>
+  <div class="section-label" id="lbl-list" style="display:none"></div>
+  <div class="list-section" id="list-section" style="display:none"></div>
+
+  <div class="empty-msg" id="empty-msg">Sonuç bulunamadı</div>
+</main>
+
+<!-- FIYAT MODAL -->
+<div class="fiyat-overlay" id="fiyat-overlay">
+  <div class="fiyat-modal">
+    <button class="fiyat-close" id="fiyat-close">&times;</button>
+    <div class="fiyat-title">Vizyon Mimarlık</div>
+    <div class="fiyat-subtitle">Hostes Paketleri</div>
+    <div class="fiyat-grid">
+
+      <!-- KART 1 -->
+      <div class="fiyat-kart">
+        <div class="fiyat-kart-img">
+          <img src="images/hostes_17_1.jpeg" alt="Tercüman Hostes">
+          <div class="fiyat-badge">₺3.600<small>günlük</small></div>
+        </div>
+        <div class="fiyat-kart-body">
+          <div class="fiyat-kart-title">Tercüman Hostes</div>
+          <ul class="fiyat-kart-list">
+            <li>Standınızda yabancı ziyaretçilerle iletişimi profesyonelce yürütür, anlık çeviri yaparak markanızı doğru aktarır</li>
+            <li><b>Türkçe · İngilizce · Arapça · Rusça</b> dillerinde akıcı iletişim</li>
+            <li>Ziyaretçi karşılama ve yönlendirme</li>
+            <li>Ürün tanıtımı</li>
+            <li>Katalog ve sunum dağıtımı</li>
+            <li>Satış görüşmelerinde aktif rol alarak iletişimi güçlendirir</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KART 2 -->
+      <div class="fiyat-kart">
+        <div class="fiyat-kart-img">
+          <img src="images/hostes_7_1.jpeg" alt="Servis Hostesi">
+          <div class="fiyat-badge">₺2.400<small>günlük</small></div>
+        </div>
+        <div class="fiyat-kart-body">
+          <div class="fiyat-kart-title">Servis Hostesi</div>
+          <ul class="fiyat-kart-list">
+            <li>İkram servisini profesyonelce sunar, güler yüzüyle ziyaretçileri karşılar ve standınıza prestij katar</li>
+            <li><b>Çay, kahve, su ve ikramların</b> servis edilmesi</li>
+            <li>Standın düzen ve hijyeninden sorumlu</li>
+            <li>Ziyaretçilere güler yüzlü yaklaşım</li>
+            <li>Takım kıyafeti ve destek</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KART 3 -->
+      <div class="fiyat-kart">
+        <div class="fiyat-kart-img">
+          <img src="images/hostes_1_1.jpeg" alt="Karşılama Hostesi">
+          <div class="fiyat-badge">₺3.000<small>günlük</small></div>
+        </div>
+        <div class="fiyat-kart-body">
+          <div class="fiyat-kart-title">Karşılama Hostesi</div>
+          <ul class="fiyat-kart-list">
+            <li>Fuar standınızda güler yüzüyle ziyaretçileri karşılar, fuar kurallarına uygun görsel duruşuyla standınıza prestij katar</li>
+            <li>Ziyaretçi yönlendirme ve bilgilendirme</li>
+            <li>Ziyaretçilere güler yüzlü yaklaşım</li>
+            <li>Takım kıyafeti ve destek</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CATERING -->
+    <div style="margin-top:48px;padding-top:36px;border-top:1px solid var(--border)">
+      <div class="fiyat-title">Catering Hizmetleri</div>
+      <div class="fiyat-subtitle">Fuar Catering Paketleri</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;">
+
+        <!-- BRONZ -->
+        <div class="fiyat-kart">
+          <div class="fiyat-kart-img">
+            <img src="catering/bronz paket.png" alt="Bronz Paket">
+            <div class="fiyat-badge">₺2.400<small>günlük</small></div>
+          </div>
+          <div class="fiyat-kart-body">
+            <div class="fiyat-kart-title">Bronz Paket</div>
+            <ul class="fiyat-kart-list">
+              <li>Bardak su, sıcak içecekler (Çay, Nescafe, Bitki Çayları)</li>
+              <li>Mutfak ekipmanları dahil</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- GÜMÜŞ -->
+        <div class="fiyat-kart">
+          <div class="fiyat-kart-img">
+            <img src="catering/gümüş paket.png" alt="Gümüş Paket">
+            <div class="fiyat-badge">₺4.800<small>günlük</small></div>
+          </div>
+          <div class="fiyat-kart-body">
+            <div class="fiyat-kart-title">Gümüş Paket</div>
+            <ul class="fiyat-kart-list">
+              <li>Bardak su, Nescafe, Çay, Bitki Çayları, Soda, Meyve Suları</li>
+              <li>Bisküvit &amp; çerezler</li>
+              <li>Mutfak ekipmanları dahil</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ALTIN -->
+        <div class="fiyat-kart">
+          <div class="fiyat-kart-img">
+            <img src="catering/altın paket.png" alt="Altın Paket">
+            <div class="fiyat-badge">₺8.000<small>günlük</small></div>
+          </div>
+          <div class="fiyat-kart-body">
+            <div class="fiyat-kart-title">Altın Paket</div>
+            <ul class="fiyat-kart-list">
+              <li>Bardak su, Nescafe, Bitki Çayları, Türk Kahvesi, Soda, Meyve Suları, Kola, Fanta</li>
+              <li>Bisküvit &amp; çerezler</li>
+              <li><b>1 Servis Hostesi</b></li>
+              <li>Mutfak ekipmanları dahil</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PLATİN -->
+        <div class="fiyat-kart" style="border-color:#c9a84c55">
+          <div class="fiyat-kart-img">
+            <img src="catering/platin paket.png" alt="Platin Paket">
+            <div class="fiyat-badge" style="background:#fff;color:#000">₺13.600<small>günlük</small></div>
+          </div>
+          <div class="fiyat-kart-body">
+            <div class="fiyat-kart-title" style="color:#e0c87a">Platin Paket</div>
+            <ul class="fiyat-kart-list">
+              <li>Bardak su, Nescafe, Çay, Bitki Çayları, Türk Kahvesi, Soda, Meyve Suları, Kola, Fanta</li>
+              <li>Gün boyu atıştırmalıklar (sigara böreği vb.)</li>
+              <li><b>1 Servis Hostesi</b></li>
+              <li><b>1 Karşılama Hostesi</b></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Notlar -->
+      <div style="margin-top:24px;padding:20px 24px;background:var(--bg2);border:1px solid var(--border)">
+        <div style="font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Genel Koşullar</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 32px;">
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm ürünler fuar süresince sınırsız servis edilmektedir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Nakliye, kurulum ve toplama hizmetleri fiyata dahildir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm ürünler günlük ve taze olarak temin edilmektedir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Tüm servis ve sunum ekipmanları fiyata dahildir</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Servis hostesi çalışma süresi fuar saatleri ile sınırlıdır</div>
+          <div style="font-size:0.7rem;color:#666;padding-left:12px;position:relative"><span style="position:absolute;left:0;color:var(--accent)">·</span> Fatura fuardan 1 gün önce kesilir</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  &copy; 2024 Brezza Ajans — Tüm hakları saklıdır
+</footer>
+
+<script>
+const HOSTESLER = [
+  {"id":1,"isim":"Dilara Durmaz","boy":"183","kilo":"70","yas":"","diller":[{"dil":"İngilizce","seviye":"B2"}],"tercuman":false,"resim1":"images/hostes_1_1.jpeg","resim2":"images/hostes_1_2.jpeg"},
+  {"id":2,"isim":"Helin Sena Kaya","boy":"167","kilo":"50","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_2_1.jpeg","resim2":"images/hostes_2_2.jpeg"},
+  {"id":3,"isim":"Eylül Arslangörür","boy":"171","kilo":"52","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_3_1.jpeg","resim2":"images/hostes_3_2.jpeg"},
+  {"id":4,"isim":"Selinay Heryer","boy":"170","kilo":"53","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_4_1.jpeg","resim2":"images/hostes_4_2.jpeg"},
+  {"id":5,"isim":"Ceyda Ercan","boy":"168","kilo":"51","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_5_1.jpeg","resim2":"images/hostes_5_2.jpeg"},
+  {"id":6,"isim":"Enise Özdal","boy":"168","kilo":"56","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_6_1.jpeg","resim2":"images/hostes_6_2.jpeg"},
+  {"id":7,"isim":"Zeynep Sude","boy":"170","kilo":"56","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_7_1.jpeg","resim2":"images/hostes_7_2.jpeg"},
+  {"id":8,"isim":"Elif Kahraman","boy":"168","kilo":"55","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_8_1.jpeg","resim2":"images/hostes_8_2.jpeg"},
+  {"id":9,"isim":"Sinem Özül","boy":"170","kilo":"50","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_9_1.jpeg","resim2":"images/hostes_9_2.jpeg"},
+  {"id":10,"isim":"İrem Kasıkasan","boy":"172","kilo":"59","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_10_1.jpeg","resim2":"images/hostes_10_2.jpeg"},
+  {"id":11,"isim":"Şinda Tanı","boy":"167","kilo":"55","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_11_1.jpeg","resim2":"images/hostes_11_2.jpeg"},
+  {"id":12,"isim":"Hiranur Sevinçkan","boy":"172","kilo":"58","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_12_1.jpeg","resim2":"images/hostes_12_2.jpeg"},
+  {"id":13,"isim":"Ennur Kekeç","boy":"173","kilo":"52","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_13_1.jpeg","resim2":"images/hostes_13_2.jpeg"},
+  {"id":14,"isim":"Remziye Kızıl","boy":"173","kilo":"59","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_14_1.jpeg","resim2":"images/hostes_14_2.jpeg"},
+  {"id":15,"isim":"Sudenaz Makas","boy":"172","kilo":"51","yas":"","diller":[],"tercuman":false,"resim1":"images/hostes_15_1.jpeg","resim2":"images/hostes_15_2.jpeg"},
+  {"id":17,"isim":"Nazlı Tekdemir","boy":"167","kilo":"55","yas":"","diller":[{"dil":"İngilizce","seviye":""}],"tercuman":true,"resim1":"images/hostes_17_1.jpeg","resim2":"images/hostes_17_2.jpeg"},
+  {"id":18,"isim":"Esma Güner","boy":"172","kilo":"57","yas":"","diller":[{"dil":"İngilizce","seviye":""}],"tercuman":true,"resim1":"images/hostes_18_1.jpeg","resim2":"images/hostes_18_2.jpeg"},
+  {"id":19,"isim":"Sevde Uysal","boy":"174","kilo":"57","yas":"","diller":[{"dil":"İngilizce","seviye":""}],"tercuman":true,"resim1":"images/hostes_19_1.jpeg","resim2":"images/hostes_19_2.jpeg"},
+  {"id":20,"isim":"Kamelya Nodava","boy":"167","kilo":"53","yas":"","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Rusça","seviye":""}],"tercuman":true,"resim1":"images/hostes_20_1.jpeg","resim2":"images/hostes_20_2.jpeg"},
+  {"id":21,"isim":"Zhyldyzbek Aisuluu","boy":"165","kilo":"57","yas":"","diller":[{"dil":"Rusça","seviye":""}],"tercuman":true,"resim1":"images/hostes_21_1.jpeg","resim2":"images/hostes_21_2.jpeg"},
+  {"id":22,"isim":"Suzanna","boy":"170","kilo":"55","yas":"","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Rusça","seviye":""}],"tercuman":true,"resim1":"images/hostes_22_1.jpeg","resim2":"images/hostes_22_2.jpeg"},
+  {"id":23,"isim":"Zeynep Kasım","boy":"163","kilo":"53","yas":"22","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Arapça","seviye":""}],"tercuman":true,"resim1":"images/hostes_23_1.jpeg","resim2":"images/hostes_23_2.jpeg"},
+  {"id":24,"isim":"Dinar Nuheyla","boy":"172","kilo":"52","yas":"","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Arapça","seviye":""}],"tercuman":true,"resim1":"images/hostes_24_1.jpeg","resim2":"images/hostes_24_2.jpeg"},
+  {"id":25,"isim":"Sama Abdalla","boy":"163","kilo":"54","yas":"","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Arapça","seviye":""}],"tercuman":true,"resim1":"images/hostes_25_1.jpeg","resim2":"images/hostes_25_2.jpeg"},
+  {"id":26,"isim":"Sofia Benaza","boy":"173","kilo":"58","yas":"","diller":[{"dil":"İngilizce","seviye":""},{"dil":"Arapça","seviye":""}],"tercuman":true,"resim1":"images/hostes_26_1.jpeg","resim2":"images/hostes_26_2.jpeg"}
+];
+
+function dilClass(dil) {
+  if (dil === 'İngilizce') return 'tag-ing';
+  if (dil === 'Rusça')     return 'tag-rus';
+  if (dil === 'Arapça')    return 'tag-ara';
+  if (dil === 'Almanca')   return 'tag-alm';
+  return '';
+}
+
+function buildTags(h) {
+  return h.diller.map(d => {
+    const sev = d.seviye ? ' ' + d.seviye : '';
+    return `<span class="tag ${dilClass(d.dil)}">${d.dil}${sev}</span>`;
+  }).join('') + (h.tercuman ? '<span class="tag tag-terc">Tercüman</span>' : '');
+}
+
+function buildStats(h) {
+  let s = '';
+  if (h.boy)  s += `<span>${h.boy} <span class="stat-val">cm</span></span>`;
+  if (h.kilo) s += `<span>${h.kilo} <span class="stat-val">kg</span></span>`;
+  if (h.yas)  s += `<span>${h.yas} <span class="stat-val">yaş</span></span>`;
+  return s;
+}
+
+function renderGrid(list) {
+  const el = document.getElementById('grid-section');
+  el.innerHTML = list.map(h => `
+    <div class="card">
+      <div class="card-photos">
+        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+      </div>
+      <div class="card-num">${String(h.id).padStart(2,'0')}</div>
+      <div class="card-info">
+        <div class="card-name">${h.isim}</div>
+        <div class="card-stats">${buildStats(h)}</div>
+        <div class="card-tags">${buildTags(h)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderList(list) {
+  const el = document.getElementById('list-section');
+  el.innerHTML = list.map(h => `
+    <div class="list-item">
+      <div class="list-photos">
+        <img src="${h.resim1}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+        <img src="${h.resim2}" alt="${h.isim}" loading="lazy" onerror="this.style.background='#1a1a1a'">
+      </div>
+      <div class="list-info">
+        <div class="list-name">${h.isim}</div>
+        <div class="list-stats">${buildStats(h)}</div>
+        <div class="list-tags">${buildTags(h)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyFilter(filter) {
+  let filtered = HOSTESLER;
+  if (filter === 'servis')    filtered = HOSTESLER.filter(h => !h.tercuman);
+  if (filter === 'tercuman')  filtered = HOSTESLER.filter(h => h.tercuman);
+  if (filter === 'ingilizce') filtered = HOSTESLER.filter(h => h.diller.some(d => d.dil === 'İngilizce'));
+  if (filter === 'rusca')     filtered = HOSTESLER.filter(h => h.diller.some(d => d.dil === 'Rusça'));
+  if (filter === 'arapca')    filtered = HOSTESLER.filter(h => h.diller.some(d => d.dil === 'Arapça'));
+
+  renderGrid(filtered);
+  renderList([]);
+
+  document.getElementById('visible-count').textContent = filtered.length;
+
+  const empty   = document.getElementById('empty-msg');
+  const grid    = document.getElementById('grid-section');
+  const list    = document.getElementById('list-section');
+  const divider = document.getElementById('divider');
+  const lblGrid = document.getElementById('lbl-grid');
+  const lblList = document.getElementById('lbl-list');
+
+  if (filtered.length === 0) {
+    empty.style.display = 'block';
+    [grid, list, divider, lblGrid, lblList].forEach(e => e.style.display = 'none');
+  } else {
+    empty.style.display = 'none';
+    [grid, list, divider, lblGrid, lblList].forEach(e => e.style.display = '');
+  }
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.filter === 'fiyatlar') {
+      document.getElementById('fiyat-overlay').classList.add('open');
+      return;
+    }
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter(btn.dataset.filter);
+  });
+});
+
+document.getElementById('fiyat-close').addEventListener('click', () => {
+  document.getElementById('fiyat-overlay').classList.remove('open');
+});
+document.getElementById('fiyat-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+
+applyFilter('all');
+</script>
+</body>
+</html>
